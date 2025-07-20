@@ -1,0 +1,160 @@
+# ===========================================================================
+# Staff Manager Configuration
+# A comprehensive system for managing staff duties, activities, and points
+# ===========================================================================
+
+# ===========================================================================
+# Role Configuration
+# Defines the Discord role IDs used for different staff levels
+# ===========================================================================
+roles:
+  staff: "1314814796402659411"    # Base staff role - Can use duty system and basic commands
+
+# ===========================================================================
+# Duty Panel Settings
+# Controls the appearance and behavior of the staff duty management panel
+# ===========================================================================
+panel:
+  channel_id: "1320457696843141120"   # Channel where the duty panel will be displayed
+  refresh_interval: 60                 # How often the panel updates (in seconds)
+  embed:
+    title: "Panel de Staff"       # Main title of the duty panel
+    description: "Maneja tu estado de staff con los botones de abajo."
+    color: "#5865F2"                   # Panel color (Discord Blurple)
+    footer: "El panel se actualiza cada 1 minuto."
+    fields:
+      active_staff:
+        title: "👥 Staffs Activos"
+        empty_message: "Ningun staff esta actualmente activo"
+      recent_offline:
+        title: "⌛ Recientemente Offline"
+        empty_message: "Ningun staff estuvo recientemente Offline"
+        timeout: 120                    # How long to show recently offline staff (in minutes)
+
+# ===========================================================================
+# Duty System Configuration
+# Defines requirements and settings for both active and invisible duty modes
+# ===========================================================================
+duty:
+  active_mode:
+    requirements:
+      messages_per_hour: 5            # Minimum messages required per hour to stay on duty
+      voice_minutes_per_hour: 5       # Minimum voice activity required per hour (in minutes)
+      require_both: false              # If true, must meet both requirements; if false, must meet at least one
+    cooldown: 5                        # Minutes before staff can re-enter duty after failing requirements
+
+  invisible_mode:
+    verification:
+      interval:
+        min: 30                         # Minimum minutes between verification checks
+        max: 45                         # Maximum minutes between verification checks
+      response_time: 2                 # Minutes allowed to respond to verification
+      cooldown: 10                      # Minutes before can re-enter after failing verification
+
+# ===========================================================================
+# Points System Configuration
+# Defines how points are earned and awarded to staff members
+# ===========================================================================
+points:
+  # Daily Activity Requirements
+  requirements:
+    messages_per_day: 15                # Daily message target for bonus points
+    voice_minutes_per_day: 10          # Daily voice activity target for bonus points
+  
+  # Daily Goal Rewards
+  rewards:
+    message_goal: 5                  # Points awarded for reaching daily message target
+    voice_goal: 5                    # Points awarded for reaching daily voice target
+  
+  # Message Points
+  messages:
+    per_message: 0.1                     # Base points earned per message
+    bonus_threshold: 100               # Messages needed before bonus points activate
+    bonus_amount: 0.3                    # Additional points per message after threshold
+  
+  # Voice Activity Points
+  voice:
+    per_minute: 0.3                    # Points earned per minute in voice channels
+    minimum_session: 5                 # Minimum minutes for a voice session to count
+  
+  # Verification Points
+  verification:
+    success: 5                        # Points awarded for passing verification
+    failure: -15                       # Points deducted for failing verification
+
+# ===========================================================================
+# Stats Display Configuration
+# Controls how statistics are displayed in graphs and commands
+# ===========================================================================
+stats:
+  graph:
+    enabled: true                      # Enable/disable graphical statistics
+    days_to_show: 7                    # Default number of days to show in graphs
+    colors:
+      messages: "#5865F2"              # Color for message statistics
+      voice: "#43B581"                 # Color for voice activity
+      duty: "#FAA61A"                  # Color for duty hours
+      inactive: "#F04747"              # Color for off-duty hours
+
+# ===========================================================================
+# Command Permissions
+# Defines which roles can use specific commands
+# ===========================================================================
+commands:
+  staffstats:
+    roles: ["1316529927650017470"]  # Staff and Admin can view statistics
+  staffgraphics:
+    roles: ["1316529927650017470"]  # Staff and Admin can view graphics
+  stafftop:
+    roles: ["1316529927650017470"]  # Staff and Admin can view leaderboards
+  staffadmin:
+    roles: ["1316529927650017470"]                         # Only Admin can use administrative commands
+  resetpanel:
+    roles: ["1316529927650017470"]                         # Only Admin can reset the duty panel
+  evaluate:
+    roles: ["1316529927650017470"]
+  analyze:
+    roles: ["1316529927650017470"]
+  activity:
+    roles: ["1316529927650017470"]
+
+# ===========================================================================
+# Logging Configuration
+# Controls how staff activities are logged
+# ===========================================================================
+logging:
+  enabled: true                                            # Master switch for logging system
+  channel_id: "1326291349292584970"                       # Main logging channel
+  verification_channel_id: "1326291349292584970"          # Channel for verification logs
+  
+  # Embed Templates for Different Log Types
+  embeds:
+    duty_enter:
+      title: "👋 Turno de trabajo iniciado"
+      color: "#43B581"                                     # Color verde para acciones positivas
+      description: "{user} ha iniciado su turno en {type}"
+      footer: "Gestión de Staff"
+    
+    duty_leave:
+      title: "👋 Turno de trabajo finalizado"
+      color: "#F04747"                                     # Color rojo para fin de turno
+      description: "{user} ha terminado su turno después de {duration}"
+      footer: "Gestión de Staff"
+    
+    verification:
+      success:
+        title: "✅ Verificación Exitosa"
+        color: "#43B581"
+        description: "{user} pasó su verificación con éxito"
+        footer: "Sistema de Verificación"
+      failure:
+        title: "❌ Verificación Fallida"
+        color: "#F04747"
+        description: "{user} no pasó su verificación"
+        footer: "Sistema de Verificación"
+    
+    duty_terminated:
+      title: "❌ Turno Finalizado"
+      color: "#F04747"
+      description: "{user} fue retirado de su turno por {reason}"
+      footer: "Sistema de Turnos"
